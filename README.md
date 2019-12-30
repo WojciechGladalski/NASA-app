@@ -1,4 +1,5 @@
 # nasa-app
+Application connected to NASA API.
 
 ## Project setup
 ```
