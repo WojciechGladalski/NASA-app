@@ -1,5 +1,5 @@
-# nasa-app
-Application connected to NASA API.
+# NASA Application
+This application is sharing knowledge and many interesting facts thanks to connection with NASA API.
 
 ## Project setup
 ```
