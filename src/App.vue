@@ -7,15 +7,15 @@
                 <Header/>
 
                 <PhotoOfTheDay
-                        v-if="photo !== {}"
+                        v-if="photo.title !== undefined"
                         v-bind:photo="photo"
                 />
 
                 <hr class="border-info">
 
                 <MarsWeather
-                    v-if="marsWeather.length !== 0"
-                    v-bind:weather="marsWeather"
+                        v-if="marsWeather.sol_keys !== undefined"
+                        v-bind:weather="marsWeather"
                 />
 
                 <hr class="border-info">

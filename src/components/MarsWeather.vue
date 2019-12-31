@@ -9,29 +9,35 @@
 
             <div id="content" v-show="showContent === true">
 
-                <div id="dataTable">
+                <div align="center" id="description">
+                    <b-card-text class="col-8 text-justify">
+                        NASA’s InSight Mars lander takes continuous weather measurements (temperature, wind, pressure)
+                        on the surface of Mars at Elysium Planitia, a flat, smooth plain near Mars’ equator.
+                    </b-card-text>
+                </div>
+
+                <div id="dataTable" class="col-12">
                     <b-table-simple hover small caption-top responsive>
-                        <caption>Weather data:</caption>
                         <b-thead head-variant="dark">
                             <b-tr>
-                                <b-th colspan="1" rowspan="2" class="align-middle">SOL</b-th>
-                                <b-th colspan="3">T (°C)</b-th>
-                                <b-th colspan="3">Pressure (Pa)</b-th>
+                                <b-th colspan="1" rowspan="2" class="align-middle col-1">SOL</b-th>
+                                <b-th colspan="3" class="col-3">Temperature (°C)</b-th>
+                                <b-th colspan="3" class="col-3">Pressure (Pa)</b-th>
                                 <b-th colspan="1" rowspan="2" class="align-middle">First datum from sensor</b-th>
                                 <b-th colspan="1" rowspan="2" class="align-middle">Last datum from sensor</b-th>
                             </b-tr>
                             <b-tr>
-                                <b-th>MIN</b-th>
-                                <b-th>AVG</b-th>
-                                <b-th>MAX</b-th>
-                                <b-th>MIN</b-th>
-                                <b-th>AVG</b-th>
-                                <b-th>MAX</b-th>
+                                <b-th>Min</b-th>
+                                <b-th>Avg</b-th>
+                                <b-th>Max</b-th>
+                                <b-th>Min</b-th>
+                                <b-th>Avg</b-th>
+                                <b-th>Max</b-th>
                             </b-tr>
                         </b-thead>
                         <b-tbody>
                             <b-tr
-                                    v-for="(sol, index) in weather.sol_keys"
+                                    v-for="(sol, index) in weather.sol_keys.slice().reverse()"
                                     v-bind:key="index"
                                     class="text-light"
                             >
@@ -50,7 +56,6 @@
                 </div>
 
             </div>
-
 
 
         </b-card-body>
@@ -73,11 +78,31 @@
             }
         },
         methods: {
-            toggleContent: function() {
+            toggleContent: function () {
                 if (!this.showContent) {
                     this.showContent = true
                 } else {
                     this.showContent = false
+                }
+            },
+            // parseWeatherDates: function() {
+            //     this.weather.sol_keys.forEach((key) => {
+            //         let firUTC = this.weather[key].First_UTC
+            //         let lasUTC = this.weather[key].Last_UTC
+            //
+            //         let f2 = firUTC.split('T')
+            //
+            //
+            //         this.weather[key].First_UTC =
+            //         this.weather[key].Last_UTC =
+            //     })
+            // }
+        },
+        watch: {
+            weather: {
+                immediate: true,
+                handler() {
+                    //this.parseWeatherDates()
                 }
             }
         }
@@ -88,8 +113,12 @@
     #title {
         font-size: 1.5em;
     }
+
     #mainDiv {
         margin-bottom: 1.1rem;
+    }
+    #description {
+        margin-bottom: 1.25rem;
     }
 
 </style>

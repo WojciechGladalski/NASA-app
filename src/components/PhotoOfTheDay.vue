@@ -12,7 +12,7 @@
                 <b-card-body>
                     <b-img v-bind:src="photo.hdurl" fluid-grow alt="Fluid-grow image"></b-img>
                 </b-card-body>
-                <b-card-text class="text-justify col-11">
+                <b-card-text class="text-justify col-12">
                     {{photo.explanation}}
                 </b-card-text>
             </div>
@@ -52,7 +52,7 @@
         },
         watch: {
             photo: {
-                immediate: false,
+                immediate: true,
                 handler() {
                     this.splitData()
                 }
