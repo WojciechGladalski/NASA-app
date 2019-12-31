@@ -19,7 +19,7 @@
 
         </b-card-body>
 
-        <b-button variant="info" v-if="showContent === false" @click="toggleContent" class="myBtn">Show</b-button>
+        <b-button variant="info" v-if="showContent === false" @click="toggleContent">Show</b-button>
         <b-button variant="info" v-else-if="showContent === true" @click="toggleContent">Hide</b-button>
 
     </div>
@@ -68,7 +68,8 @@
     #title {
         font-size: 1.5em;
     }
-    .myBtn {
-        margin-bottom: 1.1em;
+    #mainDiv {
+        margin-top: 1rem;
+        margin-bottom: 1.1rem;
     }
 </style>

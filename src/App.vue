@@ -14,8 +14,16 @@
                 <hr class="border-info">
 
                 <MarsWeather
+                    v-if="marsWeather.length !== 0"
+                    v-bind:weather="marsWeather"
+                />
+
+                <hr class="border-info">
+
+                <Exoplanets
 
                 />
+
             </b-card>
         </b-container>
 
@@ -26,13 +34,15 @@
     import Header from './components/Header.vue'
     import PhotoOfTheDay from './components/PhotoOfTheDay.vue'
     import MarsWeather from './components/MarsWeather.vue'
+    import Exoplanets from "./components/Exoplanets";
 
     export default {
         name: 'app',
         components: {
             Header,
             PhotoOfTheDay,
-            MarsWeather
+            MarsWeather,
+            Exoplanets
         },
         mounted: function () {
             fetch('https://api.nasa.gov/planetary/apod?api_key=q6ZJMt3SVi49YwTPTb6DlzmGDgYYA2xSGosNFFyF', {
@@ -42,10 +52,18 @@
                 .then((jsonPhoto) => {
                     this.photo = jsonPhoto
                 })
+            fetch('https://api.nasa.gov/insight_weather/?api_key=q6ZJMt3SVi49YwTPTb6DlzmGDgYYA2xSGosNFFyF&feedtype=json&ver=1.0', {
+                method: 'get'
+            })
+                .then(response => response.json())
+                .then((jsonWeather) => {
+                    this.marsWeather = jsonWeather
+                })
         },
         data: function() {
             return {
-                photo: {}
+                photo: {},
+                marsWeather: {}
             }
         }
     }
