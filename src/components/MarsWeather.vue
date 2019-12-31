@@ -1,13 +1,13 @@
 <template>
     <div id="mainDiv">
-        <b-card-body class="text-center">
+        <b-card-body>
 
 
             <b-card-text>
                 Weather on Mars
             </b-card-text>
 
-            <b-button variant="primary">Coming soon!</b-button>
+            <b-button variant="info">Coming soon!</b-button>
         </b-card-body>
     </div>
 </template>

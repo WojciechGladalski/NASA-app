@@ -1,6 +1,6 @@
 <template>
     <div id="mainDiv">
-        <b-card-body class="text-center">
+        <b-card-body align="center">
 
             <b-card-text id="title">
                 Photo of The Day
@@ -12,15 +12,15 @@
                 <b-card-body>
                     <b-img v-bind:src="photo.hdurl" fluid-grow alt="Fluid-grow image"></b-img>
                 </b-card-body>
-                <b-card-text class="text-justify">
+                <b-card-text class="text-justify col-11">
                     {{photo.explanation}}
                 </b-card-text>
             </div>
 
         </b-card-body>
 
-        <b-button variant="primary" v-if="showContent === false" @click="toggleContent" class="myBtn">Show</b-button>
-        <b-button variant="primary" v-else-if="showContent === true" @click="toggleContent">Hide</b-button>
+        <b-button variant="info" v-if="showContent === false" @click="toggleContent" class="myBtn">Show</b-button>
+        <b-button variant="info" v-else-if="showContent === true" @click="toggleContent">Hide</b-button>
 
     </div>
 </template>

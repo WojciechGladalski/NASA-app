@@ -2,7 +2,7 @@
     <div id="app">
 
         <b-container class="bv-example-row col-sm-8">
-            <b-card title="Card Title" no-body>
+            <b-card title="Card Title" no-body class="bg-dark text-light border-info">
 
                 <Header/>
 
@@ -11,9 +11,11 @@
                         v-bind:photo="photo"
                 />
 
-                <hr>
+                <hr class="border-info">
 
-                <MarsWeather/>
+                <MarsWeather
+
+                />
             </b-card>
         </b-container>
 
