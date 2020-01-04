@@ -2,7 +2,6 @@
     <div id="mainDiv">
         <b-card-body>
 
-
             <b-card-text id="title">
                 Weather on Mars
             </b-card-text>
@@ -23,8 +22,9 @@
                                 <b-th colspan="1" rowspan="2" class="align-middle col-1">SOL</b-th>
                                 <b-th colspan="3" class="col-3">Temperature (°C)</b-th>
                                 <b-th colspan="3" class="col-3">Pressure (Pa)</b-th>
-                                <b-th colspan="1" rowspan="2" class="align-middle">First datum from sensor</b-th>
-                                <b-th colspan="1" rowspan="2" class="align-middle">Last datum from sensor</b-th>
+                                <b-th colspan="1" rowspan="2" class="align-middle">Season</b-th>
+                                <b-th colspan="1" rowspan="2" class="align-middle col-2">First datum from sensor</b-th>
+                                <b-th colspan="1" rowspan="2" class="align-middle col-2">Last datum from sensor</b-th>
                             </b-tr>
                             <b-tr>
                                 <b-th>Min</b-th>
@@ -45,9 +45,10 @@
                                 <b-td>{{weather[sol].AT.mn}}</b-td>
                                 <b-td>{{weather[sol].AT.av}}</b-td>
                                 <b-td>{{weather[sol].AT.mx}}</b-td>
-                                <b-td>{{weather[sol].AT.mn}}</b-td>
-                                <b-td>{{weather[sol].AT.av}}</b-td>
-                                <b-td>{{weather[sol].AT.mx}}</b-td>
+                                <b-td>{{weather[sol].PRE.mn}}</b-td>
+                                <b-td>{{weather[sol].PRE.av}}</b-td>
+                                <b-td>{{weather[sol].PRE.mx}}</b-td>
+                                <b-td>{{weather[sol].Season}}</b-td>
                                 <b-td>{{weather[sol].First_UTC}}</b-td>
                                 <b-td>{{weather[sol].Last_UTC}}</b-td>
                             </b-tr>
@@ -85,24 +86,23 @@
                     this.showContent = false
                 }
             },
-            // parseWeatherDates: function() {
-            //     this.weather.sol_keys.forEach((key) => {
-            //         let firUTC = this.weather[key].First_UTC
-            //         let lasUTC = this.weather[key].Last_UTC
-            //
-            //         let f2 = firUTC.split('T')
-            //
-            //
-            //         this.weather[key].First_UTC =
-            //         this.weather[key].Last_UTC =
-            //     })
-            // }
+            parseWeatherDates: function() {
+                this.weather.sol_keys.forEach((key) => {
+                    let firstUTCsplitted = this.weather[key].First_UTC.split('T')
+                    let dateFromFirstUTCsplitted = firstUTCsplitted[0].split('-')
+                    this.weather[key].First_UTC = dateFromFirstUTCsplitted[2] + '-' + dateFromFirstUTCsplitted[1] + '-' + dateFromFirstUTCsplitted[0] + ', ' + firstUTCsplitted[1].substring(0, 5)
+
+                    let lastUTCsplitted = this.weather[key].Last_UTC.split('T')
+                    let dateFromLastUTCsplitted = lastUTCsplitted[0].split('-')
+                    this.weather[key].Last_UTC = dateFromLastUTCsplitted[2] + '-' + dateFromLastUTCsplitted[1] + '-' + dateFromLastUTCsplitted[0] + ', ' + lastUTCsplitted[1].substring(0, 5)
+                })
+            }
         },
         watch: {
             weather: {
                 immediate: true,
                 handler() {
-                    //this.parseWeatherDates()
+                    this.parseWeatherDates()
                 }
             }
         }
