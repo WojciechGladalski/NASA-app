@@ -56,8 +56,49 @@
                     </b-table-simple>
                 </div>
 
-            </div>
+                <div id="chart-demo">
+                    <DxPolarChart
+                            v-if="showContent === true"
+                            id="radarChart"
+                            :data-source="periodValues"
+                            palette="Soft"
+                            title="Wind Rose (samples quantity)"
+                            @legend-click="onLegendClick"
+                    >
+                        <DxCommonSeriesSettings type="stackedbar"/>
+                        <DxSeries
+                                v-for="wind in windSources"
+                                :key="wind.value"
+                                :value-field="wind.value"
+                                :name="wind.name"
+                        />
+                        <DxMargin
+                                :bottom="50"
+                                :left="100"
+                        />
+                        <DxArgumentAxis
+                                :first-point-on-start-angle="true"
+                                discrete-axis-division-mode="crossLabels"
+                        />
+                        <DxValueAxis :value-margins-enabled="false"/>
+                        <DxExport :enabled="true"/>
+                    </DxPolarChart>
+                    <div class="center">
 
+                    </div>
+                    <div class="center">
+                        <DxSelectBox
+                                v-if="showContent === true"
+                                :width="110"
+                                :data-source="windRoseData"
+                                :value.sync="periodValues"
+                                display-expr="period"
+                                value-expr="values"
+                        />
+                    </div>
+                </div>
+
+            </div>
 
         </b-card-body>
 
@@ -68,14 +109,39 @@
 </template>
 
 <script>
+    import DxSelectBox from 'devextreme-vue/select-box';
+    import {windSources} from '../windScopeTemplate.js';
+    import {
+        DxPolarChart,
+        DxCommonSeriesSettings,
+        DxSeries,
+        DxArgumentAxis,
+        DxValueAxis,
+        DxMargin,
+        DxExport
+    } from 'devextreme-vue/polar-chart';
+
     export default {
         name: "MarsWeather",
         props: {
             weather: Object
         },
+        components: {
+            DxSelectBox,
+            DxPolarChart,
+            DxCommonSeriesSettings,
+            DxSeries,
+            DxArgumentAxis,
+            DxValueAxis,
+            DxMargin,
+            DxExport
+        },
         data() {
             return {
-                showContent: false
+                showContent: false,
+                windSources,
+                windRoseData: [],
+                periodValues: []
             }
         },
         methods: {
@@ -86,7 +152,7 @@
                     this.showContent = false
                 }
             },
-            parseWeatherDates: function() {
+            parseWeatherDates: function () {
                 this.weather.sol_keys.forEach((key) => {
                     let firstUTCsplitted = this.weather[key].First_UTC.split('T')
                     let dateFromFirstUTCsplitted = firstUTCsplitted[0].split('-')
@@ -96,6 +162,77 @@
                     let dateFromLastUTCsplitted = lastUTCsplitted[0].split('-')
                     this.weather[key].Last_UTC = dateFromLastUTCsplitted[2] + '-' + dateFromLastUTCsplitted[1] + '-' + dateFromLastUTCsplitted[0] + ', ' + lastUTCsplitted[1].substring(0, 5)
                 })
+            },
+            parseWindSamplesData: function () {
+                this.weather.sol_keys.forEach((key) => {
+                    let period = 'SOL ' + key
+                    let values = []
+
+                    let directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']
+
+                    for (let i = 0; i <= 15; i++) {
+
+                        let val1 = 0
+                        let val2 = 0
+                        let val3 = 0
+                        let val4 = 0
+                        let val5 = 0
+                        let val6 = 0
+
+                        if (this.weather[key].WD[i] !== undefined) {
+
+                            if (this.weather[key].WD[i].ct <= 5000) {
+                                val1 = this.weather[key].WD[i].ct
+                            } else if (this.weather[key].WD[i].ct <= 10000) {
+                                val1 = 5000
+                                val2 = this.weather[key].WD[i].ct - 5000
+                            } else if (this.weather[key].WD[i].ct <= 15000) {
+                                val1 = 5000
+                                val2 = 5000
+                                val3 = this.weather[key].WD[i].ct - 10000
+                            } else if (this.weather[key].WD[i].ct <= 20000) {
+                                val1 = 5000
+                                val2 = 5000
+                                val3 = 5000
+                                val4 = this.weather[key].WD[i].ct - 15000
+                            } else if (this.weather[key].WD[i].ct <= 25000) {
+                                val1 = 5000
+                                val2 = 5000
+                                val3 = 5000
+                                val4 = 5000
+                                val5 = this.weather[key].WD[i].ct - 20000
+                            } else if (this.weather[key].WD[i].ct <= 30000) {
+                                val1 = 5000
+                                val2 = 5000
+                                val3 = 5000
+                                val4 = 5000
+                                val5 = 5000
+                                val6 = this.weather[key].WD[i].ct - 25000
+                            }
+                        }
+
+                        values.push({
+                            arg: directions[i],
+                            val1: val1,
+                            val2: val2,
+                            val3: val3,
+                            val4: val4,
+                            val5: val5,
+                            val6: val6
+                        })
+
+                    }
+                    this.windRoseData.push({period, values})
+                })
+                this.windRoseData.reverse()
+                this.periodValues = this.windRoseData[0].values
+            },
+            onLegendClick({target: series}) {
+                if (series.isVisible()) {
+                    series.hide();
+                } else {
+                    series.show();
+                }
             }
         },
         watch: {
@@ -103,6 +240,7 @@
                 immediate: true,
                 handler() {
                     this.parseWeatherDates()
+                    this.parseWindSamplesData()
                 }
             }
         }
@@ -117,8 +255,30 @@
     #mainDiv {
         margin-bottom: 1.1rem;
     }
+
     #description {
-        margin-bottom: 1.25rem;
+        margin-bottom: 2.5rem;
+    }
+
+    #dataTable {
+        margin-bottom: 2.5rem;
+    }
+
+    #radarChart {
+        height: 500px;
+    }
+
+    #chart-demo > .center {
+        text-align: center;
+    }
+
+    #chart-demo > .center > .dx-widget {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #windTitle {
+        font-size: 1.3em;
     }
 
 </style>

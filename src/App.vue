@@ -34,7 +34,7 @@
     import Header from './components/Header.vue'
     import PhotoOfTheDay from './components/PhotoOfTheDay.vue'
     import MarsWeather from './components/MarsWeather.vue'
-    import Exoplanets from "./components/Exoplanets";
+    import Exoplanets from "./components/Exoplanets"
 
     export default {
         name: 'app',
@@ -78,4 +78,5 @@
         color: #2c3e50;
         margin-top: 60px;
     }
+
 </style>
