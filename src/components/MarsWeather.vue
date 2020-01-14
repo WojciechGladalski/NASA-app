@@ -15,46 +15,46 @@
                     </b-card-text>
                 </div>
 
-                <div id="dataTable" class="col-12">
-                    <b-table-simple hover small caption-top responsive>
-                        <b-thead head-variant="dark">
-                            <b-tr>
-                                <b-th colspan="1" rowspan="2" class="align-middle col-1">SOL</b-th>
-                                <b-th colspan="3" class="col-3">Temperature (°C)</b-th>
-                                <b-th colspan="3" class="col-3">Pressure (Pa)</b-th>
-                                <b-th colspan="1" rowspan="2" class="align-middle">Season</b-th>
-                                <b-th colspan="1" rowspan="2" class="align-middle col-2">First datum from sensor</b-th>
-                                <b-th colspan="1" rowspan="2" class="align-middle col-2">Last datum from sensor</b-th>
-                            </b-tr>
-                            <b-tr>
-                                <b-th>Min</b-th>
-                                <b-th>Avg</b-th>
-                                <b-th>Max</b-th>
-                                <b-th>Min</b-th>
-                                <b-th>Avg</b-th>
-                                <b-th>Max</b-th>
-                            </b-tr>
-                        </b-thead>
-                        <b-tbody>
-                            <b-tr
-                                    v-for="(sol, index) in weather.sol_keys.slice().reverse()"
-                                    v-bind:key="index"
-                                    class="text-light"
-                            >
-                                <b-td>{{sol}}</b-td>
-                                <b-td>{{weather[sol].AT.mn}}</b-td>
-                                <b-td>{{weather[sol].AT.av}}</b-td>
-                                <b-td>{{weather[sol].AT.mx}}</b-td>
-                                <b-td>{{weather[sol].PRE.mn}}</b-td>
-                                <b-td>{{weather[sol].PRE.av}}</b-td>
-                                <b-td>{{weather[sol].PRE.mx}}</b-td>
-                                <b-td>{{weather[sol].Season}}</b-td>
-                                <b-td>{{weather[sol].First_UTC}}</b-td>
-                                <b-td>{{weather[sol].Last_UTC}}</b-td>
-                            </b-tr>
-                        </b-tbody>
-                    </b-table-simple>
-                </div>
+<!--                <div id="dataTable" class="col-12">-->
+<!--                    <b-table-simple hover small caption-top responsive>-->
+<!--                        <b-thead head-variant="dark">-->
+<!--                            <b-tr>-->
+<!--                                <b-th colspan="1" rowspan="2" class="align-middle col-1">SOL</b-th>-->
+<!--                                <b-th colspan="3" class="col-3">Temperature (°C)</b-th>-->
+<!--                                <b-th colspan="3" class="col-3">Pressure (Pa)</b-th>-->
+<!--                                <b-th colspan="1" rowspan="2" class="align-middle">Season</b-th>-->
+<!--                                <b-th colspan="1" rowspan="2" class="align-middle col-2">First datum from sensor</b-th>-->
+<!--                                <b-th colspan="1" rowspan="2" class="align-middle col-2">Last datum from sensor</b-th>-->
+<!--                            </b-tr>-->
+<!--                            <b-tr>-->
+<!--                                <b-th>Min</b-th>-->
+<!--                                <b-th>Avg</b-th>-->
+<!--                                <b-th>Max</b-th>-->
+<!--                                <b-th>Min</b-th>-->
+<!--                                <b-th>Avg</b-th>-->
+<!--                                <b-th>Max</b-th>-->
+<!--                            </b-tr>-->
+<!--                        </b-thead>-->
+<!--                        <b-tbody>-->
+<!--                            <b-tr-->
+<!--                                    v-for="(sol, index) in weather.sol_keys.slice().reverse()"-->
+<!--                                    v-bind:key="index"-->
+<!--                                    class="text-light"-->
+<!--                            >-->
+<!--                                <b-td>{{sol}}</b-td>-->
+<!--                                <b-td>{{weather[sol].AT.mn}}</b-td>-->
+<!--                                <b-td>{{weather[sol].AT.av}}</b-td>-->
+<!--                                <b-td>{{weather[sol].AT.mx}}</b-td>-->
+<!--                                <b-td>{{weather[sol].PRE.mn}}</b-td>-->
+<!--                                <b-td>{{weather[sol].PRE.av}}</b-td>-->
+<!--                                <b-td>{{weather[sol].PRE.mx}}</b-td>-->
+<!--                                <b-td>{{weather[sol].Season}}</b-td>-->
+<!--                                <b-td>{{weather[sol].First_UTC}}</b-td>-->
+<!--                                <b-td>{{weather[sol].Last_UTC}}</b-td>-->
+<!--                            </b-tr>-->
+<!--                        </b-tbody>-->
+<!--                    </b-table-simple>-->
+<!--                </div>-->
 
                 <div id="chart-demo">
                     <DxPolarChart
@@ -62,7 +62,7 @@
                             id="radarChart"
                             :data-source="periodValues"
                             palette="Soft"
-                            title="Wind Rose (samples quantity)"
+                            title="Quantity of Samples"
                             @legend-click="onLegendClick"
                     >
                         <DxCommonSeriesSettings type="stackedbar"/>
@@ -73,7 +73,7 @@
                                 :name="wind.name"
                         />
                         <DxMargin
-                                :bottom="50"
+                                :bottom="25"
                                 :left="100"
                         />
                         <DxArgumentAxis
@@ -83,9 +83,28 @@
                         <DxValueAxis :value-margins-enabled="false"/>
                         <DxExport :enabled="true"/>
                     </DxPolarChart>
-                    <div class="center">
 
-                    </div>
+                    <DxChart
+                            v-if="showContent === true"
+                            id="chart"
+                            :data-source="periodValues"
+                            title="Wind Speed"
+                    >
+                        <DxSeries
+                                argument-field="windSpeed"
+                                value-field="windSpeedValue"
+                                name="m/s"
+                                type="bar"
+                                color="#00C0D0"
+                        />
+                        <DxMargin
+                                :left="80"
+                                :bottom="25"
+                        />
+                        <DxExport :enabled="true"/>
+                    </DxChart>
+
+
                     <div class="center">
                         <DxSelectBox
                                 v-if="showContent === true"
@@ -120,6 +139,8 @@
         DxMargin,
         DxExport
     } from 'devextreme-vue/polar-chart';
+    import {DxChart} from 'devextreme-vue/chart';
+
 
     export default {
         name: "MarsWeather",
@@ -134,14 +155,18 @@
             DxArgumentAxis,
             DxValueAxis,
             DxMargin,
-            DxExport
+            DxExport,
+            DxChart
         },
         data() {
             return {
                 showContent: false,
                 windSources,
                 windRoseData: [],
-                periodValues: []
+                periodValues: [],
+
+
+                columns: ['min', 'avg', 'max']
             }
         },
         methods: {
@@ -222,10 +247,22 @@
                         })
 
                     }
+
+                    if (this.weather[key].HWS !== undefined) {
+                        values.push({windSpeed: 'min', windSpeedValue: this.weather[key].HWS.mn}, {
+                            windSpeed: 'avg',
+                            windSpeedValue: this.weather[key].HWS.av
+                        }, {windSpeed: 'max', windSpeedValue: this.weather[key].HWS.mx})
+                    } else {
+                        //todo sth
+                    }
+
                     this.windRoseData.push({period, values})
                 })
                 this.windRoseData.reverse()
                 this.periodValues = this.windRoseData[0].values
+                // eslint-disable-next-line no-console
+                console.log(this.periodValues)
             },
             onLegendClick({target: series}) {
                 if (series.isVisible()) {
@@ -277,8 +314,8 @@
         vertical-align: middle;
     }
 
-    #windTitle {
-        font-size: 1.3em;
+    #chart {
+        height: 440px;
     }
 
 </style>
