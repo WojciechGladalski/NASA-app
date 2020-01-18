@@ -66,7 +66,7 @@
         margin-bottom: 0px;
     }
     #title {
-        font-size: 1.5em;
+        font-size: 1.95em;
     }
     #mainDiv {
         margin-top: 1rem;
