@@ -15,46 +15,135 @@
                     </b-card-text>
                 </div>
 
-<!--                <div id="dataTable" class="col-12">-->
-<!--                    <b-table-simple hover small caption-top responsive>-->
-<!--                        <b-thead head-variant="dark">-->
-<!--                            <b-tr>-->
-<!--                                <b-th colspan="1" rowspan="2" class="align-middle col-1">SOL</b-th>-->
-<!--                                <b-th colspan="3" class="col-3">Temperature (°C)</b-th>-->
-<!--                                <b-th colspan="3" class="col-3">Pressure (Pa)</b-th>-->
-<!--                                <b-th colspan="1" rowspan="2" class="align-middle">Season</b-th>-->
-<!--                                <b-th colspan="1" rowspan="2" class="align-middle col-2">First datum from sensor</b-th>-->
-<!--                                <b-th colspan="1" rowspan="2" class="align-middle col-2">Last datum from sensor</b-th>-->
-<!--                            </b-tr>-->
-<!--                            <b-tr>-->
-<!--                                <b-th>Min</b-th>-->
-<!--                                <b-th>Avg</b-th>-->
-<!--                                <b-th>Max</b-th>-->
-<!--                                <b-th>Min</b-th>-->
-<!--                                <b-th>Avg</b-th>-->
-<!--                                <b-th>Max</b-th>-->
-<!--                            </b-tr>-->
-<!--                        </b-thead>-->
-<!--                        <b-tbody>-->
-<!--                            <b-tr-->
-<!--                                    v-for="(sol, index) in weather.sol_keys.slice().reverse()"-->
-<!--                                    v-bind:key="index"-->
-<!--                                    class="text-light"-->
-<!--                            >-->
-<!--                                <b-td>{{sol}}</b-td>-->
-<!--                                <b-td>{{weather[sol].AT.mn}}</b-td>-->
-<!--                                <b-td>{{weather[sol].AT.av}}</b-td>-->
-<!--                                <b-td>{{weather[sol].AT.mx}}</b-td>-->
-<!--                                <b-td>{{weather[sol].PRE.mn}}</b-td>-->
-<!--                                <b-td>{{weather[sol].PRE.av}}</b-td>-->
-<!--                                <b-td>{{weather[sol].PRE.mx}}</b-td>-->
-<!--                                <b-td>{{weather[sol].Season}}</b-td>-->
-<!--                                <b-td>{{weather[sol].First_UTC}}</b-td>-->
-<!--                                <b-td>{{weather[sol].Last_UTC}}</b-td>-->
-<!--                            </b-tr>-->
-<!--                        </b-tbody>-->
-<!--                    </b-table-simple>-->
-<!--                </div>-->
+                <div id="dataTable" class="col-8">
+                    <b-table-simple hover small caption-top responsive>
+                        <b-thead head-variant="dark">
+                            <b-tr>
+                                <b-th colspan="1" rowspan="1" class="align-middle">SOL</b-th>
+                                <b-th colspan="1" rowspan="1" class="align-middle">First datum from sensor</b-th>
+                                <b-th colspan="1" rowspan="1" class="align-middle">Last datum from sensor</b-th>
+                                <b-th colspan="1" rowspan="1" class="align-middle">Season</b-th>
+                            </b-tr>
+                        </b-thead>
+                        <b-tbody>
+                            <b-tr
+                                    v-for="(sol, index) in weather.sol_keys.slice().reverse()"
+                                    v-bind:key="index"
+                                    class="text-light"
+                            >
+                                <b-td>{{sol}}</b-td>
+                                <b-td>{{weather[sol].First_UTC}}</b-td>
+                                <b-td>{{weather[sol].Last_UTC}}</b-td>
+                                <b-td>{{weather[sol].Season.charAt(0).toUpperCase() + weather[sol].Season.slice(1)}}</b-td>
+                            </b-tr>
+                        </b-tbody>
+                    </b-table-simple>
+                </div>
+
+                <div id="chart-demo-temp">
+                    <DxChart
+                            id="chart-temp"
+                            v-if="showContent === true"
+                            :data-source="temperatureData"
+                            palette="Violet"
+                            title="Architecture Share Over Time (Count)"
+                    >
+                        <DxCommonSeriesSettings
+                                :type="type"
+                                argument-field="sol"
+                        />
+                        <DxCommonAxisSettings>
+                            <DxGrid :visible="true"/>
+                        </DxCommonAxisSettings>
+                        <DxSeries
+                                v-for="tem in temperatureTemplate"
+                                :key="tem.value"
+                                :value-field="tem.value"
+                                :name="tem.name"
+                        />
+                        <DxMargin :bottom="20"/>
+                        <DxArgumentAxis
+                                :allow-decimals="false"
+                                :axis-division-factor="60"
+                        >
+                            <DxLabel>
+                                <DxFormat type="decimal"/>
+                            </DxLabel>
+                        </DxArgumentAxis>
+                        <DxLegend
+                                vertical-alignment="top"
+                                horizontal-alignment="right"
+                        />
+                        <DxExport :enabled="true"/>
+                        <DxTooltip :enabled="true"/>
+                    </DxChart>
+                    <div class="options"
+                         v-if="showContent === true"
+                    >
+                        <div class="caption">Options</div>
+                        <div class="option">
+                            <span>Series Type</span>
+                            <DxSelectBox
+                                    :data-source="types"
+                                    :value.sync="type"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chart-demo-press">
+                    <DxChart
+                            id="chart-press"
+                            v-if="showContent === true"
+                            :data-source="pressureData"
+                            palette="Violet"
+                            title="Architecture Share Over Time (Count)"
+                    >
+                        <DxCommonSeriesSettings
+                                :type="type"
+                                argument-field="sol"
+                        />
+                        <DxCommonAxisSettings>
+                            <DxGrid :visible="true"/>
+                        </DxCommonAxisSettings>
+                        <DxSeries
+                                v-for="press in pressureTemplate"
+                                :key="press.value"
+                                :value-field="press.value"
+                                :name="press.name"
+                        />
+                        <DxMargin :bottom="20"/>
+                        <DxArgumentAxis
+                                :allow-decimals="false"
+                                :axis-division-factor="60"
+                        >
+                            <DxLabel>
+                                <DxFormat type="decimal"/>
+                            </DxLabel>
+                        </DxArgumentAxis>
+                        <DxLegend
+                                vertical-alignment="top"
+                                horizontal-alignment="right"
+                        />
+                        <DxExport :enabled="true"/>
+                        <DxTooltip :enabled="true"/>
+                    </DxChart>
+                    <div class="options"
+                         v-if="showContent === true"
+                    >
+                        <div class="caption">Options</div>
+                        <div class="option">
+                            <span>Series Type</span>
+                            <DxSelectBox
+                                    :data-source="types"
+                                    :value.sync="type"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <h4><strong>Wind Data for chosen SOL</strong></h4>
+                <hr id="segregator" class="border-info">
 
                 <div id="chart-demo">
                     <DxPolarChart
@@ -73,8 +162,8 @@
                                 :name="wind.name"
                         />
                         <DxMargin
-                                :bottom="25"
-                                :left="100"
+                                :bottom="18"
+                                :left="47"
                         />
                         <DxArgumentAxis
                                 :first-point-on-start-angle="true"
@@ -98,14 +187,14 @@
                                 color="#00C0D0"
                         />
                         <DxMargin
-                                :left="80"
-                                :bottom="25"
+                                :left="24"
+                                :bottom="18"
                         />
                         <DxExport :enabled="true"/>
                     </DxChart>
 
 
-                    <div class="center">
+                    <div id="selector" class="center">
                         <DxSelectBox
                                 v-if="showContent === true"
                                 :width="110"
@@ -142,6 +231,22 @@
     import {DxChart} from 'devextreme-vue/chart';
 
 
+    import {
+        architectureSources,
+        sharingStatisticsInfo,
+        temperatureTemplate,
+        pressureTemplate
+    } from '../basicWeatherDataTemplate.js';
+
+    import {
+        DxCommonAxisSettings,
+        DxGrid,
+        DxLegend,
+        DxTooltip,
+        DxLabel,
+        DxFormat
+    } from 'devextreme-vue/chart';
+
     export default {
         name: "MarsWeather",
         props: {
@@ -156,7 +261,15 @@
             DxValueAxis,
             DxMargin,
             DxExport,
-            DxChart
+            DxChart,
+
+
+            DxCommonAxisSettings,
+            DxGrid,
+            DxLegend,
+            DxTooltip,
+            DxLabel,
+            DxFormat
         },
         data() {
             return {
@@ -164,9 +277,17 @@
                 windSources,
                 windRoseData: [],
                 periodValues: [],
+                columns: ['min', 'avg', 'max'],
 
 
-                columns: ['min', 'avg', 'max']
+                architectureSources,
+                sharingStatisticsInfo,
+                types: ['spline', 'stackedspline', 'fullstackedspline'],
+                type: 'spline',
+                temperatureData: [],
+                temperatureTemplate,
+                pressureData: [],
+                pressureTemplate
             }
         },
         methods: {
@@ -261,8 +382,9 @@
                 })
                 this.windRoseData.reverse()
                 this.periodValues = this.windRoseData[0].values
+
                 // eslint-disable-next-line no-console
-                console.log(this.periodValues)
+                //console.log(this.periodValues)
             },
             onLegendClick({target: series}) {
                 if (series.isVisible()) {
@@ -270,6 +392,23 @@
                 } else {
                     series.show();
                 }
+            },
+            parseTemperatureAndPressure: function () {
+                this.weather.sol_keys.forEach((key) => {
+
+                    this.temperatureData.push({
+                        max: this.weather[key].AT.mx,
+                        avg: this.weather[key].AT.av,
+                        min: this.weather[key].AT.mn,
+                        sol: 'SOL ' + key
+                    })
+                    this.pressureData.push({
+                        max: this.weather[key].PRE.mx,
+                        avg: this.weather[key].PRE.av,
+                        min: this.weather[key].PRE.mn,
+                        sol: 'SOL ' + key
+                    })
+                })
             }
         },
         watch: {
@@ -278,6 +417,7 @@
                 handler() {
                     this.parseWeatherDates()
                     this.parseWindSamplesData()
+                    this.parseTemperatureAndPressure()
                 }
             }
         }
@@ -286,7 +426,7 @@
 
 <style scoped>
     #title {
-        font-size: 1.5em;
+        font-size: 1.95em;
     }
 
     #mainDiv {
@@ -294,10 +434,6 @@
     }
 
     #description {
-        margin-bottom: 2.5rem;
-    }
-
-    #dataTable {
         margin-bottom: 2.5rem;
     }
 
@@ -316,6 +452,40 @@
 
     #chart {
         height: 440px;
+    }
+
+    #selector {
+        margin-bottom: 25px;
+        margin-right: 0.31%;
+    }
+
+    #segregator {
+        width: 45%;
+    }
+
+
+    .options {
+        padding: 20px;
+        background-color: rgba(191, 191, 191, 0.15);
+        margin-top: 20px;
+    }
+
+    .option {
+        margin-top: 10px;
+    }
+
+    .caption {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .option > span {
+        margin-right: 10px;
+    }
+
+    .option > .dx-widget {
+        display: inline-block;
+        vertical-align: middle;
     }
 
 </style>
