@@ -7,10 +7,14 @@
                 Exoplanets
             </b-card-text>
 
+            <div>
+
+            </div>
 
         </b-card-body>
 
-        <b-button variant="info">Coming Soon!</b-button>
+        <b-button variant="info" v-if="0 === 0">Coming Soon!</b-button>
+        <b-button variant="info" v-else-if="0 === 1">null</b-button>
 
     </div>
 </template>
@@ -23,10 +27,10 @@
 
 <style scoped>
     #title {
-        font-size: 1.5em;
+        font-size: 1.95em;
     }
     #mainDiv {
-        margin-bottom: 1.1rem;
+        margin-bottom: 2.1rem;
     }
 
 </style>
