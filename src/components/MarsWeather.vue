@@ -15,129 +15,123 @@
                     </b-card-text>
                 </div>
 
-                <div id="dataTable" class="col-8">
-                    <b-table-simple hover small caption-top responsive>
-                        <b-thead head-variant="dark">
-                            <b-tr>
-                                <b-th colspan="1" rowspan="1" class="align-middle">SOL</b-th>
-                                <b-th colspan="1" rowspan="1" class="align-middle">First datum from sensor</b-th>
-                                <b-th colspan="1" rowspan="1" class="align-middle">Last datum from sensor</b-th>
-                                <b-th colspan="1" rowspan="1" class="align-middle">Season</b-th>
-                            </b-tr>
-                        </b-thead>
-                        <b-tbody>
-                            <b-tr
-                                    v-for="(sol, index) in weather.sol_keys.slice().reverse()"
-                                    v-bind:key="index"
-                                    class="text-light"
-                            >
-                                <b-td>{{sol}}</b-td>
-                                <b-td>{{weather[sol].First_UTC}}</b-td>
-                                <b-td>{{weather[sol].Last_UTC}}</b-td>
-                                <b-td>{{weather[sol].Season.charAt(0).toUpperCase() + weather[sol].Season.slice(1)}}</b-td>
-                            </b-tr>
-                        </b-tbody>
-                    </b-table-simple>
-                </div>
-
-                <div id="chart-demo-temp">
-                    <DxChart
-                            id="chart-temp"
-                            v-if="showContent === true"
-                            :data-source="temperatureData"
-                            palette="Violet"
-                            title="Architecture Share Over Time (Count)"
-                    >
-                        <DxCommonSeriesSettings
-                                :type="type"
-                                argument-field="sol"
-                        />
-                        <DxCommonAxisSettings>
-                            <DxGrid :visible="true"/>
-                        </DxCommonAxisSettings>
-                        <DxSeries
-                                v-for="tem in temperatureTemplate"
-                                :key="tem.value"
-                                :value-field="tem.value"
-                                :name="tem.name"
-                        />
-                        <DxMargin :bottom="20"/>
-                        <DxArgumentAxis
-                                :allow-decimals="false"
-                                :axis-division-factor="60"
-                        >
-                            <DxLabel>
-                                <DxFormat type="decimal"/>
-                            </DxLabel>
-                        </DxArgumentAxis>
-                        <DxLegend
-                                vertical-alignment="top"
-                                horizontal-alignment="right"
-                        />
-                        <DxExport :enabled="true"/>
-                        <DxTooltip :enabled="true"/>
-                    </DxChart>
-                    <div class="options"
-                         v-if="showContent === true"
-                    >
-                        <div class="caption">Options</div>
-                        <div class="option">
-                            <span>Series Type</span>
-                            <DxSelectBox
-                                    :data-source="types"
-                                    :value.sync="type"
-                            />
-                        </div>
+                <div id="outerTableDiv" align="center">
+                    <div id="dataTable" class="col-8 text-center">
+                        <b-table-simple hover small caption-top responsive>
+                            <b-thead head-variant="dark">
+                                <b-tr>
+                                    <b-th colspan="1" rowspan="1" class="align-middle">SOL</b-th>
+                                    <b-th colspan="1" rowspan="1" class="align-middle">First datum from sensor</b-th>
+                                    <b-th colspan="1" rowspan="1" class="align-middle">Last datum from sensor</b-th>
+                                    <b-th colspan="1" rowspan="1" class="align-middle">Season</b-th>
+                                </b-tr>
+                            </b-thead>
+                            <b-tbody>
+                                <b-tr
+                                        v-for="(sol, index) in weather.sol_keys.slice().reverse()"
+                                        v-bind:key="index"
+                                        class="text-light"
+                                >
+                                    <b-td>{{sol}}</b-td>
+                                    <b-td>{{weather[sol].First_UTC}}</b-td>
+                                    <b-td>{{weather[sol].Last_UTC}}</b-td>
+                                    <b-td>{{weather[sol].Season.charAt(0).toUpperCase() +
+                                        weather[sol].Season.slice(1)}}
+                                    </b-td>
+                                </b-tr>
+                            </b-tbody>
+                        </b-table-simple>
                     </div>
                 </div>
 
-                <div id="chart-demo-press">
-                    <DxChart
-                            id="chart-press"
-                            v-if="showContent === true"
-                            :data-source="pressureData"
-                            palette="Violet"
-                            title="Architecture Share Over Time (Count)"
-                    >
-                        <DxCommonSeriesSettings
-                                :type="type"
-                                argument-field="sol"
-                        />
-                        <DxCommonAxisSettings>
-                            <DxGrid :visible="true"/>
-                        </DxCommonAxisSettings>
-                        <DxSeries
-                                v-for="press in pressureTemplate"
-                                :key="press.value"
-                                :value-field="press.value"
-                                :name="press.name"
-                        />
-                        <DxMargin :bottom="20"/>
-                        <DxArgumentAxis
-                                :allow-decimals="false"
-                                :axis-division-factor="60"
+                <div align="center">
+                    <div id="chart-demo-temp" class="col-12">
+                        <DxChart
+                                id="chart-temp"
+                                v-if="showContent === true"
+                                :data-source="temperatureData"
+                                palette="Violet"
+                                title="Temperature (℃) per SOL"
                         >
-                            <DxLabel>
-                                <DxFormat type="decimal"/>
-                            </DxLabel>
-                        </DxArgumentAxis>
-                        <DxLegend
-                                vertical-alignment="top"
-                                horizontal-alignment="right"
-                        />
-                        <DxExport :enabled="true"/>
-                        <DxTooltip :enabled="true"/>
-                    </DxChart>
-                    <div class="options"
-                         v-if="showContent === true"
-                    >
-                        <div class="caption">Options</div>
-                        <div class="option">
-                            <span>Series Type</span>
-                            <DxSelectBox
-                                    :data-source="types"
-                                    :value.sync="type"
+                            <DxCommonSeriesSettings
+                                    :type="type"
+                                    argument-field="sol"
                             />
+                            <DxCommonAxisSettings>
+                                <DxGrid :visible="true"/>
+                            </DxCommonAxisSettings>
+                            <DxSeries
+                                    v-for="tem in temperatureTemplate"
+                                    :key="tem.value"
+                                    :value-field="tem.value"
+                                    :name="tem.name"
+                            />
+                            <DxMargin :bottom="20"/>
+                            <DxArgumentAxis
+                                    :allow-decimals="false"
+                                    :axis-division-factor="60"
+                            >
+                                <DxLabel>
+                                    <DxFormat type="decimal"/>
+                                </DxLabel>
+                            </DxArgumentAxis>
+                            <DxLegend
+                                    vertical-alignment="top"
+                                    horizontal-alignment="right"
+                            />
+                            <DxExport :enabled="true"/>
+                            <DxTooltip :enabled="true"/>
+                        </DxChart>
+                    </div>
+
+                    <div id="chart-demo-press" class="col-12">
+                        <DxChart
+                                id="chart-press"
+                                v-if="showContent === true"
+                                :data-source="pressureData"
+                                palette="Violet"
+                                title="Pressure (Pa) per SOL"
+                        >
+                            <DxCommonSeriesSettings
+                                    :type="type"
+                                    argument-field="sol"
+                            />
+                            <DxCommonAxisSettings>
+                                <DxGrid :visible="true"/>
+                            </DxCommonAxisSettings>
+                            <DxSeries
+                                    v-for="press in pressureTemplate"
+                                    :key="press.value"
+                                    :value-field="press.value"
+                                    :name="press.name"
+                            />
+                            <DxMargin :bottom="20"/>
+                            <DxArgumentAxis
+                                    :allow-decimals="false"
+                                    :axis-division-factor="60"
+                            >
+                                <DxLabel>
+                                    <DxFormat type="decimal"/>
+                                </DxLabel>
+                            </DxArgumentAxis>
+                            <DxLegend
+                                    vertical-alignment="top"
+                                    horizontal-alignment="right"
+                            />
+                            <DxExport :enabled="true"/>
+                            <DxTooltip :enabled="true"/>
+                        </DxChart>
+                        <div class=""
+                             v-if="showContent === true"
+                        >
+                            <div class="caption">Options</div>
+                            <div class="option">
+                                <span>Series Type</span>
+                                <DxSelectBox
+                                        :data-source="types"
+                                        :value.sync="type"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -163,7 +157,7 @@
                         />
                         <DxMargin
                                 :bottom="18"
-                                :left="47"
+                                :left="80"
                         />
                         <DxArgumentAxis
                                 :first-point-on-start-angle="true"
@@ -177,17 +171,17 @@
                             v-if="showContent === true"
                             id="chart"
                             :data-source="periodValues"
-                            title="Wind Speed"
+                            title="Wind Speed (m/s)"
                     >
                         <DxSeries
                                 argument-field="windSpeed"
                                 value-field="windSpeedValue"
-                                name="m/s"
+                                name=" "
                                 type="bar"
                                 color="#00C0D0"
                         />
                         <DxMargin
-                                :left="24"
+                                :left="57"
                                 :bottom="18"
                         />
                         <DxExport :enabled="true"/>
@@ -228,17 +222,12 @@
         DxMargin,
         DxExport
     } from 'devextreme-vue/polar-chart';
-    import {DxChart} from 'devextreme-vue/chart';
-
-
     import {
-        architectureSources,
-        sharingStatisticsInfo,
         temperatureTemplate,
         pressureTemplate
     } from '../basicWeatherDataTemplate.js';
-
     import {
+        DxChart,
         DxCommonAxisSettings,
         DxGrid,
         DxLegend,
@@ -262,8 +251,6 @@
             DxMargin,
             DxExport,
             DxChart,
-
-
             DxCommonAxisSettings,
             DxGrid,
             DxLegend,
@@ -278,12 +265,8 @@
                 windRoseData: [],
                 periodValues: [],
                 columns: ['min', 'avg', 'max'],
-
-
-                architectureSources,
-                sharingStatisticsInfo,
-                types: ['spline', 'stackedspline', 'fullstackedspline'],
-                type: 'spline',
+                types: ['Spline', 'Stackedspline', 'Fullstackedspline'],
+                type: 'Spline',
                 temperatureData: [],
                 temperatureTemplate,
                 pressureData: [],
@@ -315,6 +298,8 @@
                     let values = []
 
                     let directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']
+
+                    let thisSolUnableDataCounter = 0
 
                     for (let i = 0; i <= 15; i++) {
 
@@ -355,6 +340,8 @@
                                 val5 = 5000
                                 val6 = this.weather[key].WD[i].ct - 25000
                             }
+                        } else {
+                            thisSolUnableDataCounter++
                         }
 
                         values.push({
@@ -369,16 +356,15 @@
 
                     }
 
-                    if (this.weather[key].HWS !== undefined) {
+                    if (this.weather[key].HWS !== undefined && thisSolUnableDataCounter < 16) {
                         values.push({windSpeed: 'min', windSpeedValue: this.weather[key].HWS.mn}, {
                             windSpeed: 'avg',
                             windSpeedValue: this.weather[key].HWS.av
                         }, {windSpeed: 'max', windSpeedValue: this.weather[key].HWS.mx})
-                    } else {
-                        //todo sth
-                    }
 
-                    this.windRoseData.push({period, values})
+                        //adding to final table
+                        this.windRoseData.push({period, values})
+                    }
                 })
                 this.windRoseData.reverse()
                 this.periodValues = this.windRoseData[0].values
@@ -400,13 +386,13 @@
                         max: this.weather[key].AT.mx,
                         avg: this.weather[key].AT.av,
                         min: this.weather[key].AT.mn,
-                        sol: 'SOL ' + key
+                        sol: parseInt(key)
                     })
                     this.pressureData.push({
                         max: this.weather[key].PRE.mx,
                         avg: this.weather[key].PRE.av,
                         min: this.weather[key].PRE.mn,
-                        sol: 'SOL ' + key
+                        sol: parseInt(key)
                     })
                 })
             }
@@ -434,7 +420,7 @@
     }
 
     #description {
-        margin-bottom: 2.5rem;
+        margin-bottom: 4.5rem;
     }
 
     #radarChart {
@@ -463,11 +449,10 @@
         width: 45%;
     }
 
-
     .options {
         padding: 20px;
         background-color: rgba(191, 191, 191, 0.15);
-        margin-top: 20px;
+        margin-top: 10px;
     }
 
     .option {
@@ -486,6 +471,18 @@
     .option > .dx-widget {
         display: inline-block;
         vertical-align: middle;
+    }
+
+    #outerTableDiv {
+        margin-bottom: 3.6rem;
+    }
+
+    #chart-demo-press {
+        margin-bottom: 4.9rem;
+    }
+
+    #chart-demo-temp {
+        margin-bottom: 10px;
     }
 
 </style>
