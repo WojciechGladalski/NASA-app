@@ -479,7 +479,7 @@
     }
 
     #chart-demo-press {
-        margin-bottom: 4.9rem;
+        margin-bottom: 4.6rem;
     }
 
     #chart-demo-temp {
