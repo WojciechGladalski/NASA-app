@@ -9,14 +9,14 @@
             <div id="content" v-show="showContent === true">
 
                 <div align="center" id="description">
-                    <b-card-text class="col-8 text-justify">
+                    <b-card-text class="col-9 text-justify">
                         NASA’s InSight Mars lander takes continuous weather measurements (temperature, wind, pressure)
                         on the surface of Mars at Elysium Planitia, a flat, smooth plain near Mars’ equator.
                     </b-card-text>
                 </div>
 
                 <div id="outerTableDiv" align="center">
-                    <div id="dataTable" class="col-8 text-center">
+                    <div id="dataTable" class="col-9 text-center">
                         <b-table-simple hover small caption-top responsive>
                             <b-thead head-variant="dark">
                                 <b-tr>
@@ -136,7 +136,7 @@
                     </div>
                 </div>
 
-                <h4><strong>Wind Data for chosen SOL</strong></h4>
+                <h3><strong>Wind Data for chosen SOL</strong></h3>
                 <hr id="segregator" class="border-info">
 
                 <div id="chart-demo">
@@ -156,7 +156,7 @@
                                 :name="wind.name"
                         />
                         <DxMargin
-                                :bottom="18"
+                                :bottom="17"
                                 :left="80"
                         />
                         <DxArgumentAxis
@@ -182,7 +182,7 @@
                         />
                         <DxMargin
                                 :left="57"
-                                :bottom="18"
+                                :bottom="23"
                         />
                         <DxExport :enabled="true"/>
                     </DxChart>
@@ -357,10 +357,10 @@
                     }
 
                     if (this.weather[key].HWS !== undefined && thisSolUnableDataCounter < 16) {
-                        values.push({windSpeed: 'min', windSpeedValue: this.weather[key].HWS.mn}, {
-                            windSpeed: 'avg',
+                        values.push({windSpeed: 'Min', windSpeedValue: this.weather[key].HWS.mn}, {
+                            windSpeed: 'Avg',
                             windSpeedValue: this.weather[key].HWS.av
-                        }, {windSpeed: 'max', windSpeedValue: this.weather[key].HWS.mx})
+                        }, {windSpeed: 'Max', windSpeedValue: this.weather[key].HWS.mx})
 
                         //adding to final table
                         this.windRoseData.push({period, values})
@@ -441,12 +441,13 @@
     }
 
     #selector {
-        margin-bottom: 25px;
+        margin-bottom: 3.2rem;
         margin-right: 0.31%;
     }
 
     #segregator {
         width: 45%;
+        margin-bottom: 29px;
     }
 
     .options {

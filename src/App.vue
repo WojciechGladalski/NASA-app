@@ -1,7 +1,7 @@
 <template>
     <div id="app">
 
-        <b-container class="bv-example-row col-sm-8">
+        <b-container class="bv-example-row col-sm-10">
             <b-card title="Card Title" no-body class="bg-dark text-light border-info">
 
                 <Header/>
@@ -77,6 +77,7 @@
         text-align: center;
         color: #2c3e50;
         margin-top: 60px;
+        margin-bottom: 60px;
     }
 
 </style>
