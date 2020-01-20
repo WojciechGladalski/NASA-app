@@ -10,7 +10,7 @@
                     {{photo.title}}, {{splittedData}}
                 </b-card-text>
                 <b-card-body>
-                    <b-img v-bind:src="photo.hdurl" fluid-grow alt="Fluid-grow image" v-if="photo.media_type == 'photo'"></b-img>
+                    <b-img v-bind:src="photo.hdurl" fluid-grow alt="Fluid-grow image" v-if="photo.media_type == 'image'"></b-img>
                     <div class="model-box" v-else-if="photo.media_type == 'video'">
                         <iframe class="model" v-bind:src="photo.url"></iframe>
                     </div>
